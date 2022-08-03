@@ -7,18 +7,19 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 dotenv.config();
 
-//import de mon fichier json
-const data = require('./data.json');
-
 const app = express();
 app.use(cors());
 
-if (process.env.PORT) {
-  app.listen(process.env.PORT, () => {
-    console.log('Server started');
-  });
-} else {
-  app.listen(3200, () => {
-    console.log('Server started');
-  });
-}
+//import des routes
+const charactersRoutes = require('./routes/characters');
+app.use(charactersRoutes);
+const comicsRoutes = require('./routes/comics');
+app.use(comicsRoutes);
+
+app.all('*', (req, res) => {
+  res.status(400).json('Route introuvable');
+});
+
+app.listen(process.env.PORT, () => {
+  console.log('Server has started ! 🤙');
+});
